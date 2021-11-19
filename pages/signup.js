@@ -30,6 +30,23 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         margin: "5px",
     },
+    firstnamefield: {
+        width: "50%",
+        margin: "5px",
+    },
+    lastnamefield: {
+        width: "50%",
+        marginTop: "5px",
+        marginBottom: "5px",
+        marginLeft: "5px",
+    },
+    nameInputs: {
+        marginTop: "45px",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
     headerDiv: {
         width: "60%",
         height: "20vh",
@@ -52,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
         textTransform: "capitalize",
         fontSize: "18px",
         maxWidth: "150px",
-        height: "60px",
+        height: "50px",
         width: "100px",
         backgroundColor: "rgb(40,40,180,0.8)",
         margin: "10px",
@@ -63,6 +80,7 @@ const Signup = (props) => {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
     return (
@@ -73,6 +91,30 @@ const Signup = (props) => {
                 <h1>
                     Lost Pet Feed
                 </h1>
+                <div className={classes.nameInputs}>
+                    <TextField
+                        label="First Name"
+                        type="text"
+                        variant="outlined"
+                        name="firstName"
+                        defaultValue={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        size="small"
+                        className={classes.firstnamefield}
+                        />
+
+                    <TextField
+                        label="Last Name"
+                        type="text"
+                        variant="outlined"
+                        name="lastName"
+                        defaultValue={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        size="small"
+                        className={classes.lastnamefield}
+                        />
+                </div>
+
                 <TextField
                     label="Email"
                     type="email"
@@ -82,7 +124,6 @@ const Signup = (props) => {
                     onChange={(event) => setEmail(event.target.value)}
                     size="small"
                     className={classes.textfield}
-                    style={{marginTop: "25px"}}
                 />
 
                 <FormControl 
@@ -111,6 +152,36 @@ const Signup = (props) => {
                             </IconButton>
                             </InputAdornment>
                         }
+                        labelWidth={75}
+                    />
+                </FormControl>
+                <FormControl 
+                    variant="outlined" 
+                    className={classes.textfield} 
+                    size="small"
+                >
+                    <InputLabel
+                        htmlFor="outlined-adornment-password"
+                    >
+                        Confirm Password
+                    </InputLabel>
+                    <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        onChange={(event) => setConfirmPassword(event.target.value)}
+                        endAdornment={
+                            <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setShowPassword(prev => !prev)}
+                                edge="end"
+                            >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                            </InputAdornment>
+                        }
+                        labelWidth={136}
                     />
                 </FormControl>
                 <Button

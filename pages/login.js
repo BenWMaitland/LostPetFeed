@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         textTransform: "capitalize",
         fontSize: "18px",
         maxWidth: "150px",
-        height: "60px",
+        height: "50px",
         width: "100px",
         backgroundColor: "rgb(40,40,180,0.8)",
         margin: "10px",
