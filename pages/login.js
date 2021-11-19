@@ -93,6 +93,7 @@ const Login = (props) => {
 
     const handleLogin = () => {
         // if false, setLoginError(true);
+        router.push("landingPage");
     }
 
     return (
