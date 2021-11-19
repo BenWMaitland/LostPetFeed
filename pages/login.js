@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@material-ui/core';
+import { Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@material-ui/core';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useRouter } from 'next/router';
@@ -60,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "rgb(40,40,180,0.8)",
         margin: "10px",
     },
+    error: {
+        marginLeft: "5px",
+    },
 }));
 const Login = (props) => {
     const classes = useStyles();
@@ -67,6 +70,30 @@ const Login = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    
+    const [invalidEmail, setInvalidEmail] = useState(false);
+    const [invalidPassword, setInvalidPassword] = useState(false);
+    const [loginError, setLoginError] = useState(false);
+
+    const validate = () => {
+        var isValid = true;
+        setLoginError(false);
+
+        email === "" ? (setInvalidEmail(true), isValid = false) : null;
+        password === "" ? (setInvalidPassword(true), isValid = false) : null;
+
+        return isValid;
+    }
+
+    const onClickLogin = () => {
+        if (validate()) {
+            handleLogin();
+        }
+    }
+
+    const handleLogin = () => {
+        // if false, setLoginError(true);
+    }
 
     return (
         <div className={classes.container} 
@@ -83,10 +110,15 @@ const Login = (props) => {
                     name="email"
                     defaultValue={email}
                     onChange={(event) => setEmail(event.target.value)}
+                    error={invalidEmail}
+                    onFocus={() => setInvalidEmail(false)}
                     size="small"
                     className={classes.textfield}
                     style={{marginTop: "25px"}}
                 />
+                {invalidEmail && (
+                    <FormHelperText className={classes.error} error>Please enter your email address</FormHelperText>
+                )}
 
                 <FormControl 
                     variant="outlined" 
@@ -103,6 +135,7 @@ const Login = (props) => {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         onChange={(event) => setPassword(event.target.value)}
+                        onFocus={() => setInvalidPassword(false)}
                         endAdornment={
                             <InputAdornment position="end">
                             <IconButton
@@ -114,10 +147,18 @@ const Login = (props) => {
                             </IconButton>
                             </InputAdornment>
                         }
+                        labelWidth={75}
+                        error={invalidPassword}
                     />
                 </FormControl>
+                {invalidPassword && (
+                    <FormHelperText className={classes.error} error>Please enter your password</FormHelperText>
+                )}
+                {loginError && (
+                    <FormHelperText className={classes.error} error>Invalid email or password</FormHelperText>
+                )}
                 <Button
-                    onClick={() => { }}
+                    onClick={() => onClickLogin()}
                     className={classes.button}
                     variant="contained"
                     color="primary"

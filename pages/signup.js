@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@material-ui/core';
+import { Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@material-ui/core';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useRouter } from 'next/router';
@@ -31,10 +31,23 @@ const useStyles = makeStyles((theme) => ({
         margin: "5px",
     },
     firstnamefield: {
+        width: "100%",
+        marginTop: "5px",
+        marginBottom: "5px",
+        marginLeft: "5px",
+    },
+    firstnameDiv: {
         width: "50%",
-        margin: "5px",
+        marginTop: "5px",
+        marginBottom: "5px",
     },
     lastnamefield: {
+        width: "100%",
+        marginTop: "5px",
+        marginBottom: "5px",
+        marginLeft: "5px",
+    },
+    lastnameDiv: {
         width: "50%",
         marginTop: "5px",
         marginBottom: "5px",
@@ -74,14 +87,48 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "rgb(40,40,180,0.8)",
         margin: "10px",
     },
+    error: {
+        marginLeft: "5px",
+    },
 }));
 const Signup = (props) => {
     const classes = useStyles();
     const router = useRouter();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+
+    const [invalidFirstName, setInvalidFirstName] = useState(false);
+    const [invalidLastName, setInvalidLastName] = useState(false);
+    const [invalidEmail, setInvalidEmail] = useState(false);
+    const [invalidPassword, setInvalidPassword] = useState(false);
+    const [invalidConfirmPassword, setInvalidConfirmPassword] = useState(false);
+
+    const validate = () => {
+        var isValid = true;
+
+        firstName === "" ? (setInvalidFirstName(true), isValid = false) : null;
+        lastName === "" ? (setInvalidLastName(true), isValid = false) : null;
+        email === "" ? (setInvalidEmail(true), isValid = false) : null;
+        password === "" ? (setInvalidPassword(true), isValid = false) : null;
+        (confirmPassword === "" || confirmPassword !== password) ? (setInvalidConfirmPassword(true), isValid = false) : null;
+
+        return isValid;
+    }
+
+    const signUpClicked = () => {
+        if (validate()) {
+            handleSubmit();
+        }
+    }
+
+    const handleSubmit = () => {
+
+    }
+
 
     return (
         <div className={classes.container} 
@@ -92,27 +139,43 @@ const Signup = (props) => {
                     Lost Pet Feed
                 </h1>
                 <div className={classes.nameInputs}>
+                    <div className={classes.firstnameDiv}>
+                        
                     <TextField
                         label="First Name"
                         type="text"
                         variant="outlined"
                         name="firstName"
                         defaultValue={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) => setFirstName(event.target.value)}
                         size="small"
                         className={classes.firstnamefield}
+                        error={invalidFirstName}
+                        onFocus={() => setInvalidFirstName(false)}
                         />
+                        {invalidFirstName && (
+                            <FormHelperText className={classes.error} error>Please enter your first name</FormHelperText>
+                        )}
+                    </div>
 
-                    <TextField
-                        label="Last Name"
-                        type="text"
-                        variant="outlined"
-                        name="lastName"
-                        defaultValue={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        size="small"
-                        className={classes.lastnamefield}
-                        />
+                    <div className={classes.lastnameDiv}>
+                        
+                        <TextField
+                            label="Last Name"
+                            type="text"
+                            variant="outlined"
+                            name="lastName"
+                            defaultValue={email}
+                            onChange={(event) => setLastName(event.target.value)}
+                            size="small"
+                            className={classes.lastnamefield}
+                            error={invalidLastName}
+                            onFocus={() => setInvalidLastName(false)}
+                            />
+                            {invalidLastName && (
+                                <FormHelperText className={classes.error} error>Please enter your last name</FormHelperText>
+                            )}
+                    </div>
                 </div>
 
                 <TextField
@@ -124,7 +187,12 @@ const Signup = (props) => {
                     onChange={(event) => setEmail(event.target.value)}
                     size="small"
                     className={classes.textfield}
-                />
+                    error={invalidEmail}
+                    onFocus={() => setInvalidEmail(false)}
+                    />
+                    {invalidEmail && (
+                        <FormHelperText className={classes.error} error>Please enter your email address</FormHelperText>
+                    )}
 
                 <FormControl 
                     variant="outlined" 
@@ -141,6 +209,7 @@ const Signup = (props) => {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         onChange={(event) => setPassword(event.target.value)}
+                        onFocus={() => setInvalidPassword(false)}
                         endAdornment={
                             <InputAdornment position="end">
                             <IconButton
@@ -153,8 +222,12 @@ const Signup = (props) => {
                             </InputAdornment>
                         }
                         labelWidth={75}
+                        error={invalidPassword}
                     />
                 </FormControl>
+                {invalidPassword && (
+                    <FormHelperText className={classes.error} error>Please enter your password</FormHelperText>
+                )}
                 <FormControl 
                     variant="outlined" 
                     className={classes.textfield} 
@@ -170,6 +243,7 @@ const Signup = (props) => {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         onChange={(event) => setConfirmPassword(event.target.value)}
+                        onFocus={() => setInvalidConfirmPassword(false)}
                         endAdornment={
                             <InputAdornment position="end">
                             <IconButton
@@ -182,10 +256,14 @@ const Signup = (props) => {
                             </InputAdornment>
                         }
                         labelWidth={136}
+                        error={invalidConfirmPassword}
                     />
                 </FormControl>
+                {invalidConfirmPassword && (
+                    <FormHelperText className={classes.error} error>Please ensure your passwords match</FormHelperText>
+                )}
                 <Button
-                    onClick={() => { }}
+                    onClick={() => signUpClicked()}
                     className={classes.button}
                     variant="contained"
                     color="primary"
