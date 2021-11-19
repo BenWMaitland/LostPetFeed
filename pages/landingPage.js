@@ -7,7 +7,9 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { Button, Typography } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Typography } from '@material-ui/core';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CommentSection from '../components/commentSection';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -17,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         alignSelf: "center",
         width: "100%",
-        // height: `calc(100vh - ${NAVBAR_HEIGHT})`,
         height: "100vh",
         padding: "20px",
     },
@@ -63,19 +64,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const dummyData = [
-    "", 
-    "", 
-    "", 
-    "", 
-    "", 
-    "", 
-    "", 
-    "", 
+    {
+        id: "1"
+    },
+    {
+        id: "2"
+    },
+    {
+        id: "3"
+    },
+    {
+        id: "4"
+    },
+    {
+        id: "5"
+    },
 ];
 
 const LandingPage = (props) => {
     const classes = useStyles();
     const router = useRouter();
+
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState("");
 
     return (
         <div className={classes.imageContainer}
@@ -88,7 +99,6 @@ const LandingPage = (props) => {
                     <div className={classes.postDiv} style={{overflow: "auto"}}>
                         {dummyData.map((dataItem, index) => (
                             <Card 
-                            // sx={{ maxWidth: 345 }} 
                             root={classes.card}
                             className={classes.card}
                             key={index}
@@ -96,22 +106,36 @@ const LandingPage = (props) => {
                                 <CardMedia
                                     component="img"
                                     height="auto"
-                                    // img={{height: "40px"}}
                                     image="/sampledog.jpg"
                                     alt="green iguana"
                                     />
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
+                                    Header
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                                    species, ranging across all continents except Antarctica
+                                    Description of missing pet, with location and contact info
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small">Share</Button>
-                                    <Button size="small">Learn More</Button>
+                                    <Accordion elevation={0} style={{width: "100%"}}>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                            style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
+                                            onClick={() => setSelectedPostId(dataItem.id)}
+                                        >
+                                            <Grid item xs={12}>
+                                                <Grid item xs={12}>
+                                                    <p className={classes.sectionHeader}>View Comments</p>
+                                                </Grid>
+                                            </Grid>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <CommentSection postId={dataItem.id} selectedPostId={selectedPostId} />
+                                        </AccordionDetails>
+                                    </Accordion>
                                 </CardActions>
                             </Card>
                         ))}

@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        // alignItems: 'center',
         alignSelf: "center",
         width: "100%",
         height: NAVBAR_HEIGHT,
@@ -18,9 +17,6 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: "30px",
         paddingRight: "30px",
         borderRadius: 10,
-        // [theme.breakpoints.down('xs')]: {
-            
-        // },
     },
     button: {
         color: "white",
@@ -33,6 +29,9 @@ const NavBar = (props) => {
 
     return (
         <div className={classes.container}>
+            <Button className={classes.button}>
+                Home
+            </Button>
             <Button className={classes.button}>
                 My Posts
             </Button>
