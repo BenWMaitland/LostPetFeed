@@ -13,10 +13,12 @@
     "@material-ui/icons": "^4.11.2",
     "@mui/icons-material": "^5.1.1",
     "@mui/material": "^5.1.1",
+    "crypto-js": "^4.1.1",
     "moment": "^2.29.1",
     "next": "12.0.4",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "secure-web-storage": "^1.0.2"
   },
   "devDependencies": {
     "eslint": "7.32.0",

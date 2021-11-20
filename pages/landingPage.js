@@ -10,7 +10,6 @@ import CardMedia from '@mui/material/CardMedia';
 import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Typography } from '@material-ui/core';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CommentSection from '../components/commentSection';
-import DeleteWarning from '../components/deleteWarning';
 import ConfirmationModal from '../components/confirmationModal';
 
 const useStyles = makeStyles((theme) => ({

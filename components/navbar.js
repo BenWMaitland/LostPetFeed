@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import { Button } from '@material-ui/core';
+import Session from './sessionService';
 
 export const NAVBAR_HEIGHT = "80px";
 
@@ -21,26 +22,57 @@ const useStyles = makeStyles((theme) => ({
     button: {
         color: "white",
     },
+    hidden: {
+        display: "hidden",
+        visibility: "hidden",
+    }
 }));
 
 const NavBar = (props) => {
     const classes = useStyles();
     const router = useRouter();
+    const [ignored, setIgnored] = useState(0);
+
+    const forceRerender = () => {
+        setIgnored(prev => prev + 1);
+    }
+
+    const onClickLogin = () => {
+        router.push("/login");
+    }
+
+    const onClickLogout = () => {
+        Session.clear();
+        // forceRerender();
+        router.reload();
+    }
 
     return (
         <div className={classes.container}>
-            <Button className={classes.button}>
+            <Button className={Session.getToken() ? classes.button : classes.hidden}>
                 Home
             </Button>
-            <Button className={classes.button}>
+            <Button className={Session.getToken() ? classes.button : classes.hidden}>
                 My Posts
             </Button>
-            <Button className={classes.button}>
+            <Button className={Session.getToken() ? classes.button : classes.hidden}>
                 Create Post
             </Button>
-            <Button className={classes.button}>
-                Logout
-            </Button>
+            {Session.getToken() ?
+                <Button 
+                    className={classes.button}
+                    onClick={() => onClickLogout()}
+                >
+                    Logout
+                </Button>
+                :
+                <Button 
+                className={classes.button}
+                onClick={() => onClickLogin()}
+                >
+                    Login
+                </Button>
+            }
         </div>
     );
 };

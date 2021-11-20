@@ -4,6 +4,7 @@ import { Button, FormControl, FormHelperText, IconButton, InputAdornment, InputL
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useRouter } from 'next/router';
+import Session from '../components/sessionService';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -93,6 +94,8 @@ const Login = (props) => {
 
     const handleLogin = () => {
         // if false, setLoginError(true);
+        Session.setToken("1");
+        Session.setUser({_id: "1"});
         router.push("/");
     }
 
@@ -117,6 +120,7 @@ const Login = (props) => {
                     size="small"
                     className={classes.textfield}
                     style={{marginTop: "25px"}}
+                    autoFocus
                 />
                 {invalidEmail && (
                     <FormHelperText className={classes.error} error>Please enter your email address</FormHelperText>

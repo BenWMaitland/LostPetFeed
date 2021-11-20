@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import { FormHelperText, TextField } from '@material-ui/core';
 import moment from 'moment';
-import DeleteWarning from './deleteWarning';
+import Session from './sessionService';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -128,23 +128,24 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
                 <div className={classes.commentContainer} key={commentItem.id}>
                     <div className={classes.dateRow}>
                         {moment(commentItem.time).format("h:mm A dddd MMMM Do, YYYY")}
-                        <span>
+                        {Session.getUser() &&
+                            <span>
                             {/* delete button */}
-                            {commentItem.userId === "1" && 
+                            {commentItem.userId === Session.getUser()?._id &&
                             <span className={classes.deleteButton} onClick={() => (setDeleteCommentId(commentItem.id))}>
                                 Delete
                             </span>}
                             {/* edit button */}
-                            {commentItem.userId === "1" && editEnabledId !== commentItem.id &&
+                            {commentItem.userId === Session.getUser()?._id && editEnabledId !== commentItem.id &&
                             <span className={classes.editButton} onClick={() => (setEditEnabledId(commentItem.id), setEditCommentContent(commentItem.comment))}>
                                 Edit
                             </span>}
                             {/* cancel button */}
-                            {commentItem.userId === "1" && editEnabledId === commentItem.id &&
+                            {commentItem.userId === Session.getUser()?._id && editEnabledId === commentItem.id &&
                             <span className={classes.editButton} onClick={() => (setEditEnabledId(""), setEditCommentContent(""))}>
                                 Cancel
                             </span>}
-                        </span>
+                        </span>}
                         
                     </div>
                     <hr style={{width: "98%"}}/>
@@ -177,6 +178,8 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
                 className={classes.textfield}
                 style={{marginTop: "25px"}}
                 onKeyPress={(e) => {if (e.key === "Enter") { handleSubmit() }}}
+                disabled={!Session.getUser()}
+                style={Session.getUser() ? {} : {backgroundColor: "lightgrey"}}
             />
                 {invalidComment && (
                     <FormHelperText className={classes.error} error>Please enter a commenet</FormHelperText>

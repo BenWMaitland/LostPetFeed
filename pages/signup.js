@@ -153,6 +153,7 @@ const Signup = (props) => {
                         className={classes.firstnamefield}
                         error={invalidFirstName}
                         onFocus={() => setInvalidFirstName(false)}
+                        autoFocus
                         />
                         {invalidFirstName && (
                             <FormHelperText className={classes.error} error>Please enter your first name</FormHelperText>
