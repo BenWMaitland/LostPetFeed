@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const NavBar = (props) => {
+const NavBar = ({forceParentRerender = () => { }}) => {
     const classes = useStyles();
     const router = useRouter();
     const [ignored, setIgnored] = useState(0);
@@ -43,8 +43,9 @@ const NavBar = (props) => {
 
     const onClickLogout = () => {
         Session.clear();
-        // forceRerender();
-        router.reload();
+        forceRerender();
+        forceParentRerender();
+        // router.reload();
     }
 
     return (

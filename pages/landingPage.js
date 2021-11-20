@@ -97,6 +97,12 @@ const LandingPage = (props) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState("");
     const [deleteCommentId, setDeleteCommentId] = useState("");
+
+    const [ignored, setIgnored] = useState(0);
+
+    const forceRerender = () => {
+        setIgnored(prev => prev + 1);
+    }
     
     const handleDelete = () => {
         // API call to delete
@@ -110,7 +116,7 @@ const LandingPage = (props) => {
             
             <div className={classes.container} 
             >
-            <NavBar />
+            <NavBar forceParentRerender={() => forceRerender()} />
             
                 <div className={classes.subContainer}>
                     <div className={classes.postDiv} style={{overflow: "auto"}}>
