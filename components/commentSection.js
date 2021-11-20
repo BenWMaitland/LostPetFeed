@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import { FormHelperText, TextField } from '@material-ui/core';
 import moment from 'moment';
-import { Modal } from "react-responsive-modal";
 import DeleteWarning from './deleteWarning';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +50,10 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 20,
     },
     modalStyle: {
-        borderRadius: 10
+        borderRadius: 10,
+        width: "600px",
+        height: "300px",
+        backgroundColor: "blue",
     },
 }));
 
@@ -88,7 +90,7 @@ const dummyComments = [
     },
 ];
 
-const CommentSection = ({selectedPostId, postId}) => {
+const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
     const classes = useStyles();
     const router = useRouter();
 
@@ -97,7 +99,6 @@ const CommentSection = ({selectedPostId, postId}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [editEnabledId, setEditEnabledId] = useState("");
     const [editCommentContent, setEditCommentContent] = useState("");
-    const [deleteCommentId, setDeleteCommentId] = useState("");
 
     useEffect(() => {
         if (selectedPostId === postId) {
@@ -121,25 +122,8 @@ const CommentSection = ({selectedPostId, postId}) => {
         setEditEnabledId("");
     }
 
-    const handleDelete = () => {
-        // API call to delete
-        setDeleteCommentId("");
-    }
-
     return (
         <div className={classes.container}>
-            <Modal
-                classNames={{modal: classes.modalStyle}}
-                open={deleteCommentId}
-                onClose={() => setDeleteCommentId("")}
-                showCloseIcon={false}
-                center
-            >
-                <DeleteWarning
-                    onClickCancel={() => setDeleteCommentId("")}
-                    onClickConfirm={() => handleDelete()}
-                />
-            </Modal>
             {dummyComments.map((commentItem, index) => (
                 <div className={classes.commentContainer} key={commentItem.id}>
                     <div className={classes.dateRow}>
