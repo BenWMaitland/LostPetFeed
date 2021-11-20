@@ -93,7 +93,7 @@ const Login = (props) => {
 
     const handleLogin = () => {
         // if false, setLoginError(true);
-        router.push("landingPage");
+        router.push("/");
     }
 
     return (
@@ -110,7 +110,8 @@ const Login = (props) => {
                     variant="outlined"
                     name="email"
                     defaultValue={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onKeyPress={(e) => {if (e.key === "Enter") { onClickLogin() }}}
+                    onChange={(event) => (setEmail(event.target.value), setInvalidEmail(false))}
                     error={invalidEmail}
                     onFocus={() => setInvalidEmail(false)}
                     size="small"
@@ -135,7 +136,8 @@ const Login = (props) => {
                         id="outlined-adornment-password"
                         type={showPassword ? "text" : "password"}
                         name="password"
-                        onChange={(event) => setPassword(event.target.value)}
+                        onKeyPress={(e) => {if (e.key === "Enter") { onClickLogin() }}}
+                        onChange={(event) => (setPassword(event.target.value), setInvalidPassword(false))}
                         onFocus={() => setInvalidPassword(false)}
                         endAdornment={
                             <InputAdornment position="end">

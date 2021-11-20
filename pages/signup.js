@@ -119,7 +119,7 @@ const Signup = (props) => {
         return isValid;
     }
 
-    const signUpClicked = () => {
+    const onClickSignup = () => {
         if (validate()) {
             handleSubmit();
         }
@@ -147,7 +147,8 @@ const Signup = (props) => {
                         variant="outlined"
                         name="firstName"
                         defaultValue={email}
-                        onChange={(event) => setFirstName(event.target.value)}
+                        onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
+                        onChange={(event) => (setFirstName(event.target.value), setInvalidFirstName(false))}
                         size="small"
                         className={classes.firstnamefield}
                         error={invalidFirstName}
@@ -166,7 +167,8 @@ const Signup = (props) => {
                             variant="outlined"
                             name="lastName"
                             defaultValue={email}
-                            onChange={(event) => setLastName(event.target.value)}
+                            onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
+                            onChange={(event) => (setLastName(event.target.value), setInvalidLastName(false))}
                             size="small"
                             className={classes.lastnamefield}
                             error={invalidLastName}
@@ -184,7 +186,8 @@ const Signup = (props) => {
                     variant="outlined"
                     name="email"
                     defaultValue={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
+                    onChange={(event) => (setEmail(event.target.value), setInvalidEmail(false))}
                     size="small"
                     className={classes.textfield}
                     error={invalidEmail}
@@ -208,7 +211,8 @@ const Signup = (props) => {
                         id="outlined-adornment-password"
                         type={showPassword ? "text" : "password"}
                         name="password"
-                        onChange={(event) => setPassword(event.target.value)}
+                        onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
+                        onChange={(event) => (setPassword(event.target.value), setInvalidPassword(false))}
                         onFocus={() => setInvalidPassword(false)}
                         endAdornment={
                             <InputAdornment position="end">
@@ -242,7 +246,8 @@ const Signup = (props) => {
                         id="outlined-adornment-password"
                         type={showPassword ? "text" : "password"}
                         name="password"
-                        onChange={(event) => setConfirmPassword(event.target.value)}
+                        onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
+                        onChange={(event) => (setConfirmPassword(event.target.value), setInvalidConfirmPassword(false))}
                         onFocus={() => setInvalidConfirmPassword(false)}
                         endAdornment={
                             <InputAdornment position="end">
@@ -263,7 +268,7 @@ const Signup = (props) => {
                     <FormHelperText className={classes.error} error>Please ensure your passwords match</FormHelperText>
                 )}
                 <Button
-                    onClick={() => signUpClicked()}
+                    onClick={() => onClickSignup()}
                     className={classes.button}
                     variant="contained"
                     color="primary"
