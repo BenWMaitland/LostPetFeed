@@ -5,6 +5,7 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useRouter } from 'next/router';
 import Session from '../components/sessionService';
+import Api from './api';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -15,9 +16,6 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: "center",
         width: "100vw",
         height: "100vh",
-        // [theme.breakpoints.down('xs')]: {
-            
-        // },
     },
     inputArea: {
         textAlign: "center",
@@ -68,11 +66,11 @@ const useStyles = makeStyles((theme) => ({
 const Login = (props) => {
     const classes = useStyles();
     const router = useRouter();
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     
-    const [invalidEmail, setInvalidEmail] = useState(false);
+    const [invalidUsername, setInvalidUsername] = useState(false);
     const [invalidPassword, setInvalidPassword] = useState(false);
     const [loginError, setLoginError] = useState(false);
 
@@ -80,7 +78,7 @@ const Login = (props) => {
         var isValid = true;
         setLoginError(false);
 
-        email === "" ? (setInvalidEmail(true), isValid = false) : null;
+        username === "" ? (setInvalidUsername(true), isValid = false) : null;
         password === "" ? (setInvalidPassword(true), isValid = false) : null;
 
         return isValid;
@@ -93,11 +91,35 @@ const Login = (props) => {
     }
 
     const handleLogin = () => {
-        // if false, setLoginError(true);
-        Session.setToken("1");
-        Session.setUser({_id: "1"});
-        router.push("/");
+        var body = {
+            username: username,
+            password: password
+        }
+        Api()
+        .post("AppUsers/Authenticate", body)
+        .then((response) => {
+            console.log("response is ", response);
+            Session.setToken("1");
+            Session.setUser({_id: "1"});
+            // router.push("/");
+        })
+        .catch((e) => {
+            console.log("e: ", e);
+            console.log("e.message: ", e.message);
+            console.log("e.response: ", e.response);
+            
+            setLoginError(true);
+        });
     }
+
+    // const handleLogin = () => {
+    //     Api().get(`Comments`)
+    //     .then((response) => {
+    //         console.log("response: ", response);
+    //     }).catch((e) => {
+    //         console.log("e: ", e);
+    //     });
+    // }
 
     return (
         <div className={classes.container} 
@@ -108,22 +130,22 @@ const Login = (props) => {
                     Lost Pet Feed
                 </h1>
                 <TextField
-                    label="Email"
-                    type="email"
+                    label="Username"
+                    type="text"
                     variant="outlined"
-                    name="email"
-                    defaultValue={email}
+                    name="username"
+                    defaultValue={username}
                     onKeyPress={(e) => {if (e.key === "Enter") { onClickLogin() }}}
-                    onChange={(event) => (setEmail(event.target.value), setInvalidEmail(false))}
-                    error={invalidEmail}
-                    onFocus={() => setInvalidEmail(false)}
+                    onChange={(event) => (setUsername(event.target.value), setInvalidUsername(false))}
+                    error={invalidUsername}
+                    onFocus={() => setInvalidUsername(false)}
                     size="small"
                     className={classes.textfield}
                     style={{marginTop: "25px"}}
                     autoFocus
                 />
-                {invalidEmail && (
-                    <FormHelperText className={classes.error} error>Please enter your email address</FormHelperText>
+                {invalidUsername && (
+                    <FormHelperText className={classes.error} error>Please enter your username</FormHelperText>
                 )}
 
                 <FormControl 
@@ -162,7 +184,7 @@ const Login = (props) => {
                     <FormHelperText className={classes.error} error>Please enter your password</FormHelperText>
                 )}
                 {loginError && (
-                    <FormHelperText className={classes.error} error>Invalid email or password</FormHelperText>
+                    <FormHelperText className={classes.error} error>Invalid username or password</FormHelperText>
                 )}
                 <Button
                     onClick={() => onClickLogin()}

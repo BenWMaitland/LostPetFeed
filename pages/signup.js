@@ -96,14 +96,14 @@ const Signup = (props) => {
     const router = useRouter();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
     const [invalidFirstName, setInvalidFirstName] = useState(false);
     const [invalidLastName, setInvalidLastName] = useState(false);
-    const [invalidEmail, setInvalidEmail] = useState(false);
+    const [invalidUsername, setInvalidUsername] = useState(false);
     const [invalidPassword, setInvalidPassword] = useState(false);
     const [invalidConfirmPassword, setInvalidConfirmPassword] = useState(false);
 
@@ -112,7 +112,7 @@ const Signup = (props) => {
 
         firstName === "" ? (setInvalidFirstName(true), isValid = false) : null;
         lastName === "" ? (setInvalidLastName(true), isValid = false) : null;
-        email === "" ? (setInvalidEmail(true), isValid = false) : null;
+        username === "" ? (setInvalidUsername(true), isValid = false) : null;
         password === "" ? (setInvalidPassword(true), isValid = false) : null;
         (confirmPassword === "" || confirmPassword !== password) ? (setInvalidConfirmPassword(true), isValid = false) : null;
 
@@ -146,7 +146,7 @@ const Signup = (props) => {
                         type="text"
                         variant="outlined"
                         name="firstName"
-                        defaultValue={email}
+                        defaultValue={username}
                         onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
                         onChange={(event) => (setFirstName(event.target.value), setInvalidFirstName(false))}
                         size="small"
@@ -167,7 +167,7 @@ const Signup = (props) => {
                             type="text"
                             variant="outlined"
                             name="lastName"
-                            defaultValue={email}
+                            defaultValue={username}
                             onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
                             onChange={(event) => (setLastName(event.target.value), setInvalidLastName(false))}
                             size="small"
@@ -182,20 +182,20 @@ const Signup = (props) => {
                 </div>
 
                 <TextField
-                    label="Email"
-                    type="email"
+                    label="Username"
+                    type="text"
                     variant="outlined"
-                    name="email"
-                    defaultValue={email}
+                    name="username"
+                    defaultValue={username}
                     onKeyPress={(e) => {if (e.key === "Enter") { onClickSignup() }}}
-                    onChange={(event) => (setEmail(event.target.value), setInvalidEmail(false))}
+                    onChange={(event) => (setUsername(event.target.value), setInvalidUsername(false))}
                     size="small"
                     className={classes.textfield}
-                    error={invalidEmail}
-                    onFocus={() => setInvalidEmail(false)}
+                    error={invalidUsername}
+                    onFocus={() => setInvalidUsername(false)}
                     />
-                    {invalidEmail && (
-                        <FormHelperText className={classes.error} error>Please enter your email address</FormHelperText>
+                    {invalidUsername && (
+                        <FormHelperText className={classes.error} error>Please enter a username</FormHelperText>
                     )}
 
                 <FormControl 
