@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { FormHelperText, TextField } from '@material-ui/core';
 import moment from 'moment';
 import Session from './sessionService';
+import Api from '../pages/api';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -94,6 +95,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
     const classes = useStyles();
     const router = useRouter();
 
+    const [commentList, setCommentList] = useState([])
     const [comment, setComment] = useState("");
     const [invalidComment, setInvalidComment] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -109,6 +111,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
     useEffect(() => {
         if (isExpanded) {
             console.log("Should fetch for postId: ", postId);
+            fetchComments();
         }
     }, [isExpanded])
 
@@ -122,26 +125,36 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
         setEditEnabledId("");
     }
 
+    const fetchComments = () => {
+        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/`, { params: { petId: postId } })
+        .then((response) => {
+            console.log("response.data: ", response.data)
+            setCommentList(response.data);
+        }).catch((e) => {
+            console.log("e: ", e);
+        })
+    }
+
     return (
         <div className={classes.container}>
-            {dummyComments.map((commentItem, index) => (
-                <div className={classes.commentContainer} key={commentItem.id}>
+            {commentList.map((commentItem, index) => (
+                <div className={classes.commentContainer} key={commentItem.commentId}>
                     <div className={classes.dateRow}>
-                        {moment(commentItem.time).format("h:mm A dddd MMMM Do, YYYY")}
-                        {Session.getUser() &&
+                        {moment(commentItem.commentDate).format("h:mm A dddd MMMM Do, YYYY")}
+                        {Session.getUser()?.username &&
                             <span>
                             {/* delete button */}
-                            {commentItem.userId === Session.getUser()?._id &&
-                            <span className={classes.deleteButton} onClick={() => (setDeleteCommentId(commentItem.id))}>
+                            {commentItem.username === Session.getUser()?.username &&
+                            <span className={classes.deleteButton} onClick={() => (setDeleteCommentId(commentItem.commentId))}>
                                 Delete
                             </span>}
                             {/* edit button */}
-                            {commentItem.userId === Session.getUser()?._id && editEnabledId !== commentItem.id &&
+                            {commentItem.username === Session.getUser()?.username && editEnabledId !== commentItem.commentId &&
                             <span className={classes.editButton} onClick={() => (setEditEnabledId(commentItem.id), setEditCommentContent(commentItem.comment))}>
                                 Edit
                             </span>}
                             {/* cancel button */}
-                            {commentItem.userId === Session.getUser()?._id && editEnabledId === commentItem.id &&
+                            {commentItem.username === Session.getUser()?.username && editEnabledId === commentItem.commentId &&
                             <span className={classes.editButton} onClick={() => (setEditEnabledId(""), setEditCommentContent(""))}>
                                 Cancel
                             </span>}
@@ -150,9 +163,10 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
                     </div>
                     <hr style={{width: "98%"}}/>
                     <span className={classes.name}>
-                        {commentItem.firstName}{" "}{commentItem.lastName}:{" "}
+                        {/* {commentItem.firstName}{" "}{commentItem.lastName}:{" "} */}
+                        {commentItem.username}:{" "}
                     </span>
-                    {editEnabledId === commentItem.id ?
+                    {editEnabledId === commentItem.commentId ?
                         <TextField
                             type="text"
                             value={editCommentContent}
@@ -160,7 +174,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
                             onChange={(event) => setEditCommentContent(event.target.value)}
                             onKeyPress={(e) => {if (e.key === "Enter") { saveEdit() }}}
                         />
-                        : commentItem.comment
+                        : commentItem.content
                     }
                 </div>
                 ))
