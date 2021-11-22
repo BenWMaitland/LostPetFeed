@@ -52,6 +52,7 @@ const NavBar = ({forceParentRerender = () => { }}) => {
     }
 
     const onClickLogout = () => {
+        setLoggedIn(false);
         Session.clear();
         forceRerender();
         forceParentRerender();

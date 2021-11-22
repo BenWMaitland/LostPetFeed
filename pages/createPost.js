@@ -359,7 +359,7 @@ const CreatePost = (props) => {
                                             htmlFor={'file'}
                                             className={classes.pictureButton}
                                         >
-                                            Add Picture
+                                            Set Picture
                                         </label>
                                         <Button
                                             onClick={() => onClickSubmit()}
