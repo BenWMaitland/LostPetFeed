@@ -178,7 +178,6 @@ const CreatePost = (props) => {
             petId: router.query.id
         }
         Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query.id}`, body)
-        // , { params: { petId: router.query?.id } })
         .then((response) => {
             setName(response.data.name)
             setStatus(response.data.status)
@@ -195,7 +194,27 @@ const CreatePost = (props) => {
     }
 
     const onClickSubmit = () => {
-        const body = {
+        if (validate()) {
+            handleSubmit();
+        }
+    }
+
+    const validate = () => {
+        var isValid = true;
+
+        (status === "Lost" && name === "") ? (setInvalidName(true), isValid = false) : null;
+        status === "" ? (setInvalidStatus(true), isValid = false) : null;
+        species === "" ? (setInvalidSpecies(true), isValid = false) : null;
+        breed === "" ? (setInvalidBreed(true), isValid = false) : null;
+        (status === "Lost" && lastSeen === "") ? (setInvalidLastSeen(true), isValid = false) : null;
+        description === "" ? (setInvalidDescription(true), isValid = false) : null;
+        contact === "" ? (setInvalidContact(true), isValid = false) : null;
+
+        return isValid;
+    }
+
+    const handleSubmit = () => {
+        var body = {
             name: name,
             status: status,
             type: species,
@@ -205,6 +224,9 @@ const CreatePost = (props) => {
             description: description,
             contact: contact,
             username: Session.getUser()?.username,
+        }
+        if (body.name === "") {
+            body.name = "Unknown"
         }
         Api().put(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query?.id}`, body)
         .then((response) => {
@@ -239,6 +261,13 @@ const CreatePost = (props) => {
 			console.log("Error: ", error);
 		};
 	}
+
+    useEffect(() => {
+        if (status === "Found") {
+            setInvalidName(false);
+            setLastSeen("");
+        }
+    }, [status])
 
     return (
         <div className={classes.imageContainer}

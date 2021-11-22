@@ -244,6 +244,13 @@ const CreatePost = (props) => {
 		};
 	}
 
+    useEffect(() => {
+        if (status === "Found") {
+            setInvalidName(false);
+            setLastSeen("");
+        }
+    }, [status])
+
     return (
         <div className={classes.imageContainer}
             style={{backgroundImage: "url(/blurred-web-backgrounds.jpg)"}}
