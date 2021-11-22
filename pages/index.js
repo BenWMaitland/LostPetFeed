@@ -115,7 +115,7 @@ const LandingPage = (props) => {
         console.log("response.data: ", response.data)
       }).catch((e) => {
         console.log("e: ", e);
-  });
+     });
     }
 
     const forceRerender = () => {
@@ -123,8 +123,14 @@ const LandingPage = (props) => {
     }
 
     const deletePost = (id) => {
-        // API call to delete
+      Api().delete(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${id}`)
+      .then((response) => {
+        console.log("response.data: ", response.data)
         setDeletePostId("");
+        fetchPetPosts();
+      }).catch((e) => {
+        console.log("e: ", e);
+      });
     }
 
     return (
