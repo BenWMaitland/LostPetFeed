@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         alignSelf: "center",
         width: "60%",
-        height: `calc(100vh - ${NAVBAR_HEIGHT} - 80px)`,
+        height: `calc(100vh - ${NAVBAR_HEIGHT} - 40px)`,
         backgroundColor: "rgb(0,0,0,0.7)",
         marginTop: "20px",
         marginBottom: "20px",
