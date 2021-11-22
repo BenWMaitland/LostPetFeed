@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
     },
     button: {
-        width: "40%",
+        width: "80%",
         minWidth: "100px",
         maxWidth: "150px",
     },
@@ -75,7 +75,7 @@ const ConfirmationModal = ({isVisible, onConfirm, header, description}) => {
                     <div className={classes.buttonDiv}>
                         <Button
                         onClick={() => onConfirm()}
-                        className={classes.confirmButton}
+                        className={classes.button}
                         variant="contained"
                         color="primary"
                         >

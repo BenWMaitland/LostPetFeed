@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
     },
     button: {
-        width: "40%",
+        width: "80%",
         minWidth: "100px",
         maxWidth: "150px",
     },

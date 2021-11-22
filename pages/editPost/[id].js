@@ -401,8 +401,8 @@ const CreatePost = (props) => {
             <OkayModal 
                 onConfirm={() => { onClickConfirm() }}
                 isVisible={displayModal}
-                header={"Post Submitted Successfully"}
-                description={"Your post has been submitted. Press Okay to be forwarded to the pet feed."}
+                header={"Post Updated Successfully"}
+                description={"Your post has been updated. Press Okay to be forwarded to the pet feed."}
             />
         </div>
     );
