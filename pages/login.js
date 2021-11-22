@@ -96,12 +96,12 @@ const Login = (props) => {
             password: password
         }
         Api()
-        .post("AppUsers/Authenticate", body)
+        .post("http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/AppUsers/Authenticate", body)
         .then((response) => {
             console.log("response is ", response);
-            Session.setToken("1");
-            Session.setUser({_id: "1"});
-            // router.push("/");
+            Session.setToken(response.data);
+            Session.setUser(response.data);
+            router.push("/");
         })
         .catch((e) => {
             console.log("e: ", e);
@@ -111,15 +111,6 @@ const Login = (props) => {
             setLoginError(true);
         });
     }
-
-    // const handleLogin = () => {
-    //     Api().get(`Comments`)
-    //     .then((response) => {
-    //         console.log("response: ", response);
-    //     }).catch((e) => {
-    //         console.log("e: ", e);
-    //     });
-    // }
 
     return (
         <div className={classes.container} 

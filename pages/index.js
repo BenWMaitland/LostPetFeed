@@ -11,6 +11,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Typography
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CommentSection from '../components/commentSection';
 import ConfirmationModal from '../components/confirmationModal';
+import Api from './api';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -65,30 +66,16 @@ const useStyles = makeStyles((theme) => ({
     cardImage: {
         maxHeight: "600px",
     },
+    label: {
+      fontSize: "16px",
+      fontWeight: "bold",
+    },
+    header: {
+      display: "flex",
+      alignItems: "center",
+      textAlign: "center",
+    },
 }));
-
-const dummyData = [
-    {
-        id: "1",
-        imageUrl: "/sampledog.jpg",
-    },
-    {
-        id: "2",
-        imageUrl: "/cutecat.jpg",
-    },
-    {
-        id: "3",
-        imageUrl: "/cutecat.jpg",
-    },
-    {
-        id: "4",
-        imageUrl: "/cutecat.jpg",
-    },
-    {
-        id: "5",
-        imageUrl: "/sampledog.jpg",
-    },
-];
 
 const LandingPage = (props) => {
     const classes = useStyles();
@@ -97,8 +84,23 @@ const LandingPage = (props) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState("");
     const [deleteCommentId, setDeleteCommentId] = useState("");
+    const [petPosts, setPetPosts] = useState([]);
     
     const [ignored, setIgnored] = useState(0);
+
+    useEffect(() => {
+      fetchPetPosts();
+    }, [])
+
+    const fetchPetPosts = () => {
+      Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`)
+      .then((response) => {
+        setPetPosts(response.data);
+        console.log("response.data: ", response.data)
+      }).catch((e) => {
+        console.log("e: ", e);
+  });
+    }
 
     const forceRerender = () => {
         setIgnored(prev => prev + 1);
@@ -120,26 +122,44 @@ const LandingPage = (props) => {
             
                 <div className={classes.subContainer}>
                     <div className={classes.postDiv} style={{overflow: "auto"}}>
-                        {dummyData.map((dataItem, index) => (
+                        {petPosts.map((dataItem, index) => (
                             <Card 
                             root={classes.card}
                             className={classes.card}
                             key={index}
                             >
+                              {dataItem.image &&
                                 <CardMedia
-                                    component="img"
-                                    height="auto"
-                                    image={dataItem.imageUrl}
-                                    alt="green iguana"
-                                    className={classes.cardImage}
-                                    />
+                                component="img"
+                                height="auto"
+                                image={dataItem.image}
+                                alt="Pet photo"
+                                className={classes.cardImage}
+                                />}
                                 <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                    Header
+                                    <Typography gutterBottom variant="h5" component="div" className={classes.header}>
+                                      {dataItem.status}{" "}{dataItem.type}{" - "}{dataItem.breed}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                    Description of missing pet, with location and contact info
-                                    </Typography>
+                                    {dataItem.name && 
+                                      <Typography variant="body2" color="textSecondary">
+                                        <span className={classes.label}>Name:{" "}</span>
+                                        <span>{dataItem.name}</span>
+                                    </Typography>}
+                                    {dataItem.lastSeen && 
+                                      <Typography variant="body2" color="textSecondary">
+                                        <span className={classes.label}>Last Seen:{" "}</span>
+                                        <span>{dataItem.lastSeen}</span>
+                                    </Typography>}
+                                    {dataItem.description && 
+                                      <Typography variant="body2" color="textSecondary">
+                                        <span className={classes.label}>Description:{" "}</span>
+                                        <span>{dataItem.description}</span>
+                                    </Typography>}
+                                    {dataItem.contact && 
+                                      <Typography variant="body2" color="textSecondary">
+                                        <span className={classes.label}>Contact:{" "}</span>
+                                        <span>{dataItem.contact}</span>
+                                    </Typography>}
                                 </CardContent>
                                 <CardActions>
                                     <Accordion elevation={0} style={{width: "100%"}}>
@@ -148,7 +168,7 @@ const LandingPage = (props) => {
                                             aria-controls="panel1a-content"
                                             id="panel1a-header"
                                             style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
-                                            onClick={() => setSelectedPostId(dataItem.id)}
+                                            onClick={() => setSelectedPostId(dataItem.petId)}
                                         >
                                             <Grid item xs={12}>
                                                 <Grid item xs={12}>
@@ -157,7 +177,7 @@ const LandingPage = (props) => {
                                             </Grid>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                            <CommentSection postId={dataItem.id} selectedPostId={selectedPostId} setDeleteCommentId={(id) => setDeleteCommentId(id)} />
+                                            <CommentSection postId={dataItem.petId} selectedPostId={selectedPostId} setDeleteCommentId={(id) => setDeleteCommentId(id)} />
                                         </AccordionDetails>
                                     </Accordion>
                                 </CardActions>
