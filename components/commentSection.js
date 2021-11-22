@@ -116,12 +116,22 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
     }, [isExpanded])
 
     const handleSubmit = () => {
-        console.log("submitted comment");
-        setComment("");
+        const body = {
+            petId: postId,
+            username: Session.getUser()?.username,
+            content: comment,
+        }
+        Api().post(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/`, body)
+        .then((response) => {
+            console.log("response.data: ", response.data)
+            setComment("");
+            fetchComments();
+        }).catch((e) => {
+            console.log("e: ", e);
+        })
     }
 
     const saveEdit = () => {
-        // submit API put
         const body = {
             content: editCommentContent
         }
@@ -129,6 +139,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
         .then((response) => {
             console.log("response.data: ", response.data)
             setEditEnabledId("");
+            setEditCommentContent("");
             fetchComments();
         }).catch((e) => {
             console.log("e: ", e);
@@ -151,7 +162,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
             {commentList.map((commentItem, index) => (
                 <div className={classes.commentContainer} key={commentItem.commentId}>
                     <div className={classes.dateRow}>
-                        {moment(commentItem.commentDate).format("h:mm A dddd MMMM Do, YYYY")}
+                        {moment(new Date(commentItem.commentDate)).format("h:mm A dddd MMMM Do, YYYY")}
                         {Session.getUser()?.username &&
                             <span>
                             {/* delete button */}
