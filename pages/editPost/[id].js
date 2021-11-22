@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
-import NavBar from '../components/navbar';
-import { NAVBAR_HEIGHT } from '../components/navbar';
+import NavBar from '../../components/navbar';
+import { NAVBAR_HEIGHT } from '../../components/navbar';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@material-ui/core';
-import Api from './api';
-import Session from '../components/sessionService';
-import OkayModal from '../components/okayModal';
+import Api from '../api';
+import Session from '../../components/sessionService';
+import OkayModal from '../../components/okayModal';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -168,6 +168,31 @@ const CreatePost = (props) => {
 
     const [displayModal, setDisplayModal] = useState(false);
 
+    useEffect(() => {
+        fetchPost();
+    }, [])
+
+    const fetchPost = () => {
+        const body = {
+            petId: router.query.id
+        }
+        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query.id}`, body)
+        // , { params: { petId: router.query?.id } })
+        .then((response) => {
+            setName(response.data.name)
+            setStatus(response.data.status)
+            setBreed(response.data.breed)
+            setSpecies(response.data.type)
+            setImage(response.data.image)
+            setLastSeen(response.data.lastSeen)
+            setDescription(response.data.description)
+            setContact(response.data.contact)
+            console.log("response.data: ", response.data)
+        }).catch((e) => {
+            console.log("e: ", e);
+        });
+    }
+
     const onClickSubmit = () => {
         const body = {
             name: name,
@@ -180,7 +205,7 @@ const CreatePost = (props) => {
             contact: contact,
             username: Session.getUser()?.username,
         }
-        Api().post(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`, body)
+        Api().put(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query?.id}`, body)
         .then((response) => {
             setDisplayModal(true);
             console.log("response.data: ", response.data)
@@ -279,7 +304,7 @@ const CreatePost = (props) => {
                                                 type="text"
                                                 variant="outlined"
                                                 name="breed"
-                                                defaultValue={breed}
+                                                value={breed}
                                                 onKeyPress={(e) => {if (e.key === "Enter") { onClickSubmit() }}}
                                                 onChange={(event) => (setBreed(event.target.value), setInvalidBreed(false))}
                                                 error={invalidBreed}
@@ -294,7 +319,7 @@ const CreatePost = (props) => {
                                         type="text"
                                         variant="outlined"
                                         name="name"
-                                        defaultValue={name}
+                                        value={name}
                                         onKeyPress={(e) => {if (e.key === "Enter") { onClickSubmit() }}}
                                         onChange={(event) => (setName(event.target.value), setInvalidName(false))}
                                         error={invalidName}
@@ -308,7 +333,7 @@ const CreatePost = (props) => {
                                         type="text"
                                         variant="outlined"
                                         name="lastSeen"
-                                        defaultValue={lastSeen}
+                                        value={lastSeen}
                                         onKeyPress={(e) => {if (e.key === "Enter") { onClickSubmit() }}}
                                         onChange={(event) => (setLastSeen(event.target.value), setInvalidLastSeen(false))}
                                         error={invalidLastSeen}
@@ -320,7 +345,7 @@ const CreatePost = (props) => {
                                         type="text"
                                         variant="outlined"
                                         name="description"
-                                        defaultValue={description}
+                                        value={description}
                                         onKeyPress={(e) => {if (e.key === "Enter") { onClickSubmit() }}}
                                         onChange={(event) => (setDescription(event.target.value), setInvalidDescription(false))}
                                         error={invalidDescription}
@@ -332,7 +357,7 @@ const CreatePost = (props) => {
                                         type="text"
                                         variant="outlined"
                                         name="contact"
-                                        defaultValue={contact}
+                                        value={contact}
                                         onKeyPress={(e) => {if (e.key === "Enter") { onClickSubmit() }}}
                                         onChange={(event) => (setContact(event.target.value), setInvalidContact(false))}
                                         error={invalidContact}
