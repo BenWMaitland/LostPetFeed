@@ -122,7 +122,17 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
 
     const saveEdit = () => {
         // submit API put
-        setEditEnabledId("");
+        const body = {
+            content: editCommentContent
+        }
+        Api().put(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/${editEnabledId}`, body)
+        .then((response) => {
+            console.log("response.data: ", response.data)
+            setEditEnabledId("");
+            fetchComments();
+        }).catch((e) => {
+            console.log("e: ", e);
+        })
     }
 
     const fetchComments = () => {
@@ -132,6 +142,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
             setCommentList(response.data);
         }).catch((e) => {
             console.log("e: ", e);
+            fetchComments();
         })
     }
 
@@ -150,7 +161,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
                             </span>}
                             {/* edit button */}
                             {commentItem.username === Session.getUser()?.username && editEnabledId !== commentItem.commentId &&
-                            <span className={classes.editButton} onClick={() => (setEditEnabledId(commentItem.id), setEditCommentContent(commentItem.comment))}>
+                            <span className={classes.editButton} onClick={() => (setEditEnabledId(commentItem.commentId), setEditCommentContent(commentItem.content))}>
                                 Edit
                             </span>}
                             {/* cancel button */}
