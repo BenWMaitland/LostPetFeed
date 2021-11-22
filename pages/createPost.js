@@ -7,7 +7,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import Api from './api';
 import Session from '../components/sessionService';
 import OkayModal from '../components/okayModal';
@@ -129,7 +129,10 @@ const useStyles = makeStyles((theme) => ({
         display: "hidden",
         visibility: "hidden",
         position: "absolute",
-    }
+    },
+    error: {
+        marginLeft: "5px",
+    },
 }));
 
 const CreatePost = (props) => {
@@ -173,7 +176,27 @@ const CreatePost = (props) => {
     }, [])
 
     const onClickSubmit = () => {
-        const body = {
+        if (validate()) {
+            handleSubmit();
+        }
+    }
+
+    const validate = () => {
+        var isValid = true;
+
+        (status === "Lost" && name === "") ? (setInvalidName(true), isValid = false) : null;
+        status === "" ? (setInvalidStatus(true), isValid = false) : null;
+        species === "" ? (setInvalidSpecies(true), isValid = false) : null;
+        breed === "" ? (setInvalidBreed(true), isValid = false) : null;
+        (status === "Lost" && lastSeen === "") ? (setInvalidLastSeen(true), isValid = false) : null;
+        description === "" ? (setInvalidDescription(true), isValid = false) : null;
+        contact === "" ? (setInvalidContact(true), isValid = false) : null;
+
+        return isValid;
+    }
+
+    const handleSubmit = () => {
+        var body = {
             name: name,
             status: status,
             type: species,
@@ -183,6 +206,9 @@ const CreatePost = (props) => {
             description: description,
             contact: contact,
             username: Session.getUser()?.username,
+        }
+        if (body.name === "") {
+            body.name = "Unknown"
         }
         Api().post(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`, body)
         .then((response) => {
@@ -259,6 +285,9 @@ const CreatePost = (props) => {
                                                     ))}
                                                 </Select>
                                             </FormControl>
+                                            {invalidStatus && (
+                                                <FormHelperText className={classes.error} error>Please enter your pet's status</FormHelperText>
+                                            )}
                                         </Grid>
                                         <Grid item xs={4}>
                                             <FormControl variant='outlined' fullWidth={true} className={classes.headerItem}>
@@ -276,6 +305,9 @@ const CreatePost = (props) => {
                                                     ))}
                                                 </Select>
                                             </FormControl>
+                                            {invalidSpecies && (
+                                                <FormHelperText className={classes.error} error>Please enter your pet's species</FormHelperText>
+                                            )}
                                         </Grid>
                                         <Grid item xs={4}>
                                             <TextField
@@ -290,6 +322,9 @@ const CreatePost = (props) => {
                                                 onFocus={() => setInvalidBreed(false)}
                                                 className={classes.headerItem}
                                             />
+                                            {invalidBreed && (
+                                                <FormHelperText className={classes.error} error>Please enter your pet's breed</FormHelperText>
+                                            )}
                                         </Grid>
                                     </Grid>
                                     {/* </div> */}
@@ -306,6 +341,9 @@ const CreatePost = (props) => {
                                         className={classes.dataItem}
                                         style={{marginTop: "5px"}}
                                     />
+                                    {invalidName && (
+                                        <FormHelperText className={classes.error} error>Please enter your pet's name</FormHelperText>
+                                    )}
                                     {status === "Lost" &&
                                     <TextField
                                         label="Last Seen (e.g. Kingston and Markham Rd. on Oct 10th)"
@@ -319,6 +357,9 @@ const CreatePost = (props) => {
                                         onFocus={() => setInvalidLastSeen(false)}
                                         className={classes.description}
                                     />}
+                                    {invalidLastSeen && (
+                                        <FormHelperText className={classes.error} error>Please enter the last time and place your pet's was seen</FormHelperText>
+                                    )}
                                     <TextField
                                         label="Description"
                                         type="text"
@@ -331,6 +372,9 @@ const CreatePost = (props) => {
                                         onFocus={() => setInvalidDescription(false)}
                                         className={classes.description}
                                     />
+                                    {invalidDescription && (
+                                        <FormHelperText className={classes.error} error>Please enter a description of your pet</FormHelperText>
+                                    )}
                                     <TextField
                                         label="Contact Info"
                                         type="text"
@@ -343,6 +387,9 @@ const CreatePost = (props) => {
                                         onFocus={() => setInvalidContact(false)}
                                         className={classes.dataItem}
                                     />
+                                    {invalidContact && (
+                                        <FormHelperText className={classes.error} error>Please enter your email address or phone number</FormHelperText>
+                                    )}
                                     <div className={classes.buttonDiv}>
                                         <input
                                             type='file'
