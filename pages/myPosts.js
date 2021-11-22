@@ -11,8 +11,8 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Typography
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CommentSection from '../components/commentSection';
 import Api from './api';
+import Session from '../components/sessionService';
 import ConfirmationModal from '../components/confirmationModal';
-import Session from "../components/sessionService";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const LandingPage = (props) => {
+const myPosts = (props) => {
     const classes = useStyles();
     const router = useRouter();
 
@@ -109,13 +109,14 @@ const LandingPage = (props) => {
     }, [])
 
     const fetchPetPosts = () => {
-      Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`)
-      .then((response) => {
-        setPetPosts(response.data);
-        console.log("response.data: ", response.data)
-      }).catch((e) => {
-        console.log("e: ", e);
-  });
+        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`)
+        .then((response) => {
+            var myPosts = response.data.filter(post => post.username === Session.getUser()?.username);
+            setPetPosts(myPosts);
+            console.log("response.data: ", response.data)
+        }).catch((e) => {
+            console.log("e: ", e);
+        })
     }
 
     const forceRerender = () => {
@@ -226,4 +227,4 @@ const LandingPage = (props) => {
     );
 };
 
-export default LandingPage;
+export default myPosts;

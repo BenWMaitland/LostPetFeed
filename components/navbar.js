@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: "center",
         width: "100%",
         height: NAVBAR_HEIGHT,
+        maxHeight: "40px",
         backgroundColor: "rgb(0,0,0,0.7)",
         paddingLeft: "30px",
         paddingRight: "30px",
@@ -32,6 +33,11 @@ const NavBar = ({forceParentRerender = () => { }}) => {
     const classes = useStyles();
     const router = useRouter();
     const [ignored, setIgnored] = useState(0);
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        setLoggedIn(Session.getToken());
+    }, [])
 
     const forceRerender = () => {
         setIgnored(prev => prev + 1);
@@ -39,6 +45,10 @@ const NavBar = ({forceParentRerender = () => { }}) => {
 
     const onClickLogin = () => {
         router.push("/login");
+    }
+
+    const onClickCreatePost = () => {
+        router.push("/createPost");
     }
 
     const onClickLogout = () => {
@@ -50,16 +60,16 @@ const NavBar = ({forceParentRerender = () => { }}) => {
 
     return (
         <div className={classes.container}>
-            <Button className={Session.getToken() ? classes.button : classes.hidden}>
+            <Button className={loggedIn ? classes.button : classes.hidden} onClick={() => { router.push("/") }} disabled={router.pathname === "/"}>
                 Home
             </Button>
-            <Button className={Session.getToken() ? classes.button : classes.hidden}>
+            <Button className={loggedIn ? classes.button : classes.hidden} onClick={() => { router.push("/myPosts") }} disabled={router.pathname === "/myPosts"}>
                 My Posts
             </Button>
-            <Button className={Session.getToken() ? classes.button : classes.hidden}>
+            <Button className={loggedIn ? classes.button : classes.hidden} onClick={() => onClickCreatePost()} disabled={router.pathname === "/createPost"}>
                 Create Post
             </Button>
-            {Session.getToken() ?
+            {loggedIn ?
                 <Button 
                     className={classes.button}
                     onClick={() => onClickLogout()}
