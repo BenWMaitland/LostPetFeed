@@ -111,7 +111,7 @@ const LandingPage = (props) => {
     const fetchPetPosts = () => {
       Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`)
       .then((response) => {
-        setPetPosts(response.data);
+        setPetPosts(response.data.reverse());
         console.log("response.data: ", response.data)
       }).catch((e) => {
         console.log("e: ", e);
