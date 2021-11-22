@@ -161,7 +161,11 @@ const LandingPage = (props) => {
                                 <CardContent>
                                     <div className={classes.headerRow}>
                                       <Typography gutterBottom variant="h5" component="div" className={classes.header}>
-                                        {dataItem.status}{" "}{dataItem.type}{" - "}{dataItem.breed}
+                                        {dataItem.status}
+                                        {dataItem.type !== "Other" && " "}
+                                        {dataItem.type !== "Other" && dataItem.type}
+                                        {" - "}
+                                        {dataItem.breed}
                                       </Typography>
                                         <Typography gutterBottom variant="h5" component="div">
                                           {dataItem.username === Session.getUser()?.username &&

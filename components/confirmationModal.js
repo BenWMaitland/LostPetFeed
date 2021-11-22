@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         width: "100vw",
         height: "100vh",
+        zIndex: 10,
     },
     container: {
         minWidth: "240px",

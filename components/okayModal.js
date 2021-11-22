@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         width: "100vw",
         height: "100vh",
+        zIndex: 10,
     },
     container: {
         minWidth: "240px",
@@ -20,7 +21,6 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "white",
         padding: "20px",
         border: "2px solid grey",
-        zIndex: 10,
     },
     hidden: {
         display: "hidden",
