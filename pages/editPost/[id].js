@@ -169,6 +169,7 @@ const CreatePost = (props) => {
     const [displayModal, setDisplayModal] = useState(false);
 
     useEffect(() => {
+        document.body.style.overflow = "hidden"
         fetchPost();
     }, [])
 

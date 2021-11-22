@@ -168,6 +168,10 @@ const CreatePost = (props) => {
 
     const [displayModal, setDisplayModal] = useState(false);
 
+    useEffect(() => {
+        document.body.style.overflow = "hidden"
+    }, [])
+
     const onClickSubmit = () => {
         const body = {
             name: name,

@@ -54,9 +54,13 @@ const NavBar = ({forceParentRerender = () => { }}) => {
     const onClickLogout = () => {
         setLoggedIn(false);
         Session.clear();
-        forceRerender();
-        forceParentRerender();
-        // router.reload();
+        if (router.pathname === "/") {
+            forceRerender();
+            forceParentRerender();
+        }
+        else {
+            router.push("/")
+        }
     }
 
     return (
