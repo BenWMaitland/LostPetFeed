@@ -5,6 +5,7 @@ import { FormHelperText, TextField } from '@material-ui/core';
 import moment from 'moment';
 import Session from './sessionService';
 import Api from '../pages/api';
+import ConfirmationModal from './confirmationModal';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -91,7 +92,7 @@ const dummyComments = [
     },
 ];
 
-const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
+const CommentSection = ({selectedPostId, postId}) => {
     const classes = useStyles();
     const router = useRouter();
 
@@ -101,6 +102,7 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [editEnabledId, setEditEnabledId] = useState("");
     const [editCommentContent, setEditCommentContent] = useState("");
+    const [deleteCommentId, setDeleteCommentId] = useState("");
 
     useEffect(() => {
         if (selectedPostId === postId) {
@@ -154,6 +156,17 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
         }).catch((e) => {
             console.log("e: ", e);
             fetchComments();
+        })
+    }
+    
+    const deleteComment = (id) => {
+        Api().delete(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/${id}`)
+        .then((response) => {
+          console.log("response.data: ", response.data);
+          setDeleteCommentId("");
+          fetchComments();
+        }).catch((e) => {
+          console.log("e: ", e);
         })
     }
 
@@ -220,6 +233,13 @@ const CommentSection = ({selectedPostId, postId, setDeleteCommentId}) => {
                 {invalidComment && (
                     <FormHelperText className={classes.error} error>Please enter a commenet</FormHelperText>
                 )}
+            <ConfirmationModal 
+                onConfirm={() => { deleteComment(deleteCommentId) }}
+                onCancel={() => { setDeleteCommentId("") }}
+                isVisible={deleteCommentId}
+                header={"Delete Comment?"}
+                description={"Are you sure you want to delete this comment?"}
+            />
         </div>
     );
 };

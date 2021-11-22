@@ -10,7 +10,6 @@ import CardMedia from '@mui/material/CardMedia';
 import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Typography } from '@material-ui/core';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CommentSection from '../components/commentSection';
-import ConfirmationModal from '../components/confirmationModal';
 import Api from './api';
 
 const useStyles = makeStyles((theme) => ({
@@ -177,7 +176,7 @@ const LandingPage = (props) => {
                                             </Grid>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                            <CommentSection postId={dataItem.petId} selectedPostId={selectedPostId} setDeleteCommentId={(id) => setDeleteCommentId(id)} />
+                                            <CommentSection postId={dataItem.petId} selectedPostId={selectedPostId} />
                                         </AccordionDetails>
                                     </Accordion>
                                 </CardActions>
@@ -186,13 +185,6 @@ const LandingPage = (props) => {
                     </div>
                 </div>
             </div>
-            <ConfirmationModal 
-                onDelete={() => { setDeleteCommentId("") }}
-                onCancel={() => { setDeleteCommentId("") }}
-                isVisible={deleteCommentId}
-                header={"Delete Comment?"}
-                description={"Are you sure you want to delete this comment?"}
-            />
         </div>
     );
 };

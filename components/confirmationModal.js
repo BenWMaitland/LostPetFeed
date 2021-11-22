@@ -3,7 +3,7 @@ import react from 'react';
 
 const useStyles = makeStyles(theme => ({
     absoluteContainer: {
-        position: "absolute",
+        position: "fixed",
         top: "0",
         left: "0",
         display: "flex",
