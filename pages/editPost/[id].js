@@ -157,6 +157,7 @@ const CreatePost = (props) => {
     const [description, setDescription] = useState("");
     const [contact, setContact] = useState("");
     const [image, setImage] = useState("");
+    const [imageFile, setImageFile] = useState(null);
 
     const [initialData, setInitialData] = useState({})
 
@@ -198,13 +199,13 @@ const CreatePost = (props) => {
 
     const restoreInitialData = () => {
         setName(initialData.name)
-            setStatus(initialData.status)
-            setBreed(initialData.breed)
-            setSpecies(initialData.type)
-            setImage(initialData.image)
-            setLastSeen(initialData.lastSeen)
-            setDescription(initialData.description)
-            setContact(initialData.contact)
+        setStatus(initialData.status)
+        setBreed(initialData.breed)
+        setSpecies(initialData.type)
+        setImage(initialData.image)
+        setLastSeen(initialData.lastSeen)
+        setDescription(initialData.description)
+        setContact(initialData.contact)
     }
 
     const onClickSubmit = () => {
@@ -228,12 +229,36 @@ const CreatePost = (props) => {
     }
 
     const handleSubmit = () => {
+        imageFile
+        ? postPetWithImage()
+        : postPet("");
+    }
+
+    const postPetWithImage = () => {
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        
+        Api().post(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/UploadImage`, formData, {
+            headers: {
+              accept: "application/json",
+              "Content-Type": "multipart/form-data",
+            },
+          })
+        .then((response) => {
+            postPet(response.data);
+            console.log("response.data: ", response.data)
+        }).catch((e) => {
+            console.log("e: ", e);
+        });
+    }
+    
+    const postPet = (imageUrl) => {
         var body = {
             name: name,
             status: status,
             type: species,
             breed: breed,
-            image: "",
+            image: imageUrl,
             lastSeen: lastSeen,
             description: description,
             contact: contact,
@@ -257,8 +282,9 @@ const CreatePost = (props) => {
     }
 
     const handleFileUpload = (event) => {
-        var photo = event.target.files[0];
+        setImageFile(event.target.files[0]);
 
+        var photo = event.target.files[0];
         getBase64(photo, (imageInBase64) => {
             console.log("imageInBase64: ", imageInBase64);
             setImage(imageInBase64);
