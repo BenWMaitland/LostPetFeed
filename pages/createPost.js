@@ -254,20 +254,24 @@ const CreatePost = (props) => {
 
         var photo = event.target.files[0];
         getBase64(photo, (imageInBase64) => {
-            console.log("imageInBase64: ", imageInBase64);
             setImage(imageInBase64);
         });
     }
 
     function getBase64(photo, cb) {
-		let reader = new FileReader();
-		reader.readAsDataURL(photo);
-		reader.onload = function () {
-			cb(reader.result);
-		};
-		reader.onerror = function (error) {
-			console.log("Error: ", error);
-		};
+        try {
+            let reader = new FileReader();
+            reader.readAsDataURL(photo);
+            reader.onload = function () {
+                cb(reader.result);
+            };
+            reader.onerror = function (error) {
+                console.log("Error: ", error);
+            };
+        }
+        catch (e) {
+            
+        }
 	}
 
     useEffect(() => {

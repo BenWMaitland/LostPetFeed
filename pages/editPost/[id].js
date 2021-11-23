@@ -203,6 +203,7 @@ const CreatePost = (props) => {
         setBreed(initialData.breed)
         setSpecies(initialData.type)
         setImage(initialData.image)
+        setImageFile(null)
         setLastSeen(initialData.lastSeen)
         setDescription(initialData.description)
         setContact(initialData.contact)
@@ -265,7 +266,10 @@ const CreatePost = (props) => {
             username: Session.getUser()?.username,
         }
         if (body.name === "") {
-            body.name = "Unknown"
+            body.name = "Unknown";
+        }
+        if (!imageUrl && image) {
+            body.image = image;
         }
         Api().put(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query?.id}`, body)
         .then((response) => {
@@ -286,20 +290,24 @@ const CreatePost = (props) => {
 
         var photo = event.target.files[0];
         getBase64(photo, (imageInBase64) => {
-            console.log("imageInBase64: ", imageInBase64);
             setImage(imageInBase64);
         });
     }
 
     function getBase64(photo, cb) {
-		let reader = new FileReader();
-		reader.readAsDataURL(photo);
-		reader.onload = function () {
-			cb(reader.result);
-		};
-		reader.onerror = function (error) {
-			console.log("Error: ", error);
-		};
+        try {
+            let reader = new FileReader();
+            reader.readAsDataURL(photo);
+            reader.onload = function () {
+                cb(reader.result);
+            };
+            reader.onerror = function (error) {
+                console.log("Error: ", error);
+            };
+        }
+        catch (e) {
+
+        }
 	}
 
     useEffect(() => {
