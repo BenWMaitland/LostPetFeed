@@ -175,7 +175,7 @@ const CommentSection = ({selectedPostId, postId}) => {
             {commentList.map((commentItem, index) => (
                 <div className={classes.commentContainer} key={commentItem.commentId}>
                     <div className={classes.dateRow}>
-                        {moment(new Date(commentItem.commentDate)).format("h:mm A dddd MMMM Do, YYYY")}
+                        {moment(new Date(commentItem.commentDate)).format("MMMM Do, YYYY - h:mm A")}
                         {Session.getUser()?.username &&
                             <span>
                             {/* delete button */}

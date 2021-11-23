@@ -13,6 +13,7 @@ import CommentSection from '../components/commentSection';
 import Api from './api';
 import ConfirmationModal from '../components/confirmationModal';
 import Session from "../components/sessionService";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -198,6 +199,11 @@ const LandingPage = (props) => {
                                       <Typography variant="body2" color="textSecondary">
                                         <span className={classes.label}>Contact:{" "}</span>
                                         <span>{dataItem.contact}</span>
+                                    </Typography>}
+                                    {dataItem.postDate && 
+                                      <Typography variant="body2" color="textSecondary">
+                                        <span className={classes.label}>Date Posted:{" "}</span>
+                                        <span>{moment(new Date(dataItem.postDate)).format("MMMM Do, YYYY - h:mm A ")}</span>
                                     </Typography>}
                                 </CardContent>
                                 <CardActions>

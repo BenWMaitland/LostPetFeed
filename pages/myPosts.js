@@ -13,6 +13,7 @@ import CommentSection from '../components/commentSection';
 import Api from './api';
 import Session from '../components/sessionService';
 import ConfirmationModal from '../components/confirmationModal';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -112,7 +113,7 @@ const myPosts = (props) => {
         Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`)
         .then((response) => {
             var myPosts = response.data.filter(post => post.username === Session.getUser()?.username);
-            setPetPosts(myPosts);
+            setPetPosts(myPosts.reverse());
             console.log("response.data: ", response.data)
         }).catch((e) => {
             console.log("e: ", e);
@@ -195,6 +196,11 @@ const myPosts = (props) => {
                                       <Typography variant="body2" color="textSecondary">
                                         <span className={classes.label}>Contact:{" "}</span>
                                         <span>{dataItem.contact}</span>
+                                    </Typography>}
+                                    {dataItem.postDate && 
+                                      <Typography variant="body2" color="textSecondary">
+                                        <span className={classes.label}>Date Posted:{" "}</span>
+                                        <span>{moment(new Date(dataItem.postDate)).format("MMMM Do, YYYY - h:mm A ")}</span>
                                     </Typography>}
                                 </CardContent>
                                 <CardActions>
