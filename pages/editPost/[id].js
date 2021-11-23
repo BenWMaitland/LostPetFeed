@@ -413,6 +413,15 @@ const CreatePost = (props) => {
                                             Set Picture
                                         </label>
                                         <Button
+                                            onClick={() => fetchPost()}
+                                            className={classes.button}
+                                            variant="contained"
+                                            color="secondary"
+                                            disableElevation
+                                        >
+                                            Undo Changes
+                                        </Button>
+                                        <Button
                                             onClick={() => onClickSubmit()}
                                             className={classes.button}
                                             variant="contained"
