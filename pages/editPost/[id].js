@@ -158,6 +158,8 @@ const CreatePost = (props) => {
     const [contact, setContact] = useState("");
     const [image, setImage] = useState("");
 
+    const [initialData, setInitialData] = useState({})
+
     const [invalidName, setInvalidName] = useState(false);
     const [invalidStatus, setInvalidStatus] = useState(false);
     const [invalidBreed, setInvalidBreed] = useState(false);
@@ -179,6 +181,7 @@ const CreatePost = (props) => {
         }
         Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query.id}`, body)
         .then((response) => {
+            setInitialData(response.data);
             setName(response.data.name)
             setStatus(response.data.status)
             setBreed(response.data.breed)
@@ -191,6 +194,17 @@ const CreatePost = (props) => {
         }).catch((e) => {
             console.log("e: ", e);
         });
+    }
+
+    const restoreInitialData = () => {
+        setName(initialData.name)
+            setStatus(initialData.status)
+            setBreed(initialData.breed)
+            setSpecies(initialData.type)
+            setImage(initialData.image)
+            setLastSeen(initialData.lastSeen)
+            setDescription(initialData.description)
+            setContact(initialData.contact)
     }
 
     const onClickSubmit = () => {
@@ -413,7 +427,7 @@ const CreatePost = (props) => {
                                             Set Picture
                                         </label>
                                         <Button
-                                            onClick={() => fetchPost()}
+                                            onClick={() => restoreInitialData()}
                                             className={classes.button}
                                             variant="contained"
                                             color="secondary"

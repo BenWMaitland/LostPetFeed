@@ -203,7 +203,7 @@ const LandingPage = (props) => {
                                     {dataItem.postDate && 
                                       <Typography variant="body2" color="textSecondary">
                                         <span className={classes.label}>Date Posted:{" "}</span>
-                                        <span>{moment(new Date(dataItem.postDate)).format("MMMM Do, YYYY - h:mm A ")}</span>
+                                        <span>{moment(new Date(dataItem.postDate.toString() + "Z")).format("MMMM Do, YYYY - h:mm A ")}</span>
                                     </Typography>}
                                 </CardContent>
                                 <CardActions>

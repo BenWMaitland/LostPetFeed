@@ -59,39 +59,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const dummyComments = [
-    {
-        id: "1",
-        firstName: "Bob",
-        lastName: "Mortimer",
-        comment: "I think I saw this dog near Maven Rd two days ago. I think I saw this dog near Maven Rd two days ago. I think I saw this dog near Maven Rd two days ago. I think I saw this dog near Maven Rd two days ago. I think I saw this dog near Maven Rd two days ago. I think I saw this dog near Maven Rd two days ago. ",
-        time: new Date(),
-    },
-    {
-        id: "2",
-        firstName: "Bob",
-        lastName: "Mortimer",
-        comment: "I think I saw this dog near Maven Rd two days ago.",
-        time: new Date(),
-    },
-    {
-        id: "3",
-        firstName: "Bob",
-        lastName: "Mortimer",
-        comment: "I think I saw this dog near Maven Rd two days ago.",
-        time: new Date(),
-        userId: "1",
-    },
-    {
-        id: "4",
-        firstName: "Bob",
-        lastName: "Mortimer",
-        comment: "I think I saw this dog near Maven Rd two days ago. Different.",
-        time: new Date(),
-        userId: "1",
-    },
-];
-
 const CommentSection = ({selectedPostId, postId}) => {
     const classes = useStyles();
     const router = useRouter();
@@ -175,7 +142,7 @@ const CommentSection = ({selectedPostId, postId}) => {
             {commentList.map((commentItem, index) => (
                 <div className={classes.commentContainer} key={commentItem.commentId}>
                     <div className={classes.dateRow}>
-                        {moment(new Date(commentItem.commentDate)).format("MMMM Do, YYYY - h:mm A")}
+                        {moment(new Date(commentItem.commentDate.toString() + "Z")).format("MMMM Do, YYYY - h:mm A")}
                         {Session.getUser()?.username &&
                             <span>
                             {/* delete button */}
