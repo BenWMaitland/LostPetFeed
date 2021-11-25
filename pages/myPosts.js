@@ -106,6 +106,7 @@ const myPosts = (props) => {
     const [ignored, setIgnored] = useState(0);
 
     useEffect(() => {
+      document.title = "Lost Pet Feed - My Posts";
       fetchPetPosts();
     }, [])
 

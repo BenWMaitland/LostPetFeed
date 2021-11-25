@@ -137,6 +137,7 @@ const LandingPage = (props) => {
     ]
 
     useEffect(() => {
+      document.title = "Lost Pet Feed";
       fetchPetPosts();
     }, [])
 

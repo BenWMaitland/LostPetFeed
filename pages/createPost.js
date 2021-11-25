@@ -173,6 +173,7 @@ const CreatePost = (props) => {
     const [displayModal, setDisplayModal] = useState(false);
 
     useEffect(() => {
+        document.title = "Lost Pet Feed - Create Post";
         document.body.style.overflow = "hidden"
     }, [])
 

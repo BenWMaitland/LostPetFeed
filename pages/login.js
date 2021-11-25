@@ -74,6 +74,10 @@ const Login = (props) => {
     const [invalidPassword, setInvalidPassword] = useState(false);
     const [loginError, setLoginError] = useState(false);
 
+    useEffect(() => {
+      document.title = "Lost Pet Feed";
+    }, [])
+
     const validate = () => {
         var isValid = true;
         setLoginError(false);
