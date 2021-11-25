@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         borderRadius: 20,
         flexDirection: 'column',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
         alignSelf: "center",
         width: "60%",
@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     postDiv: {
         paddingLeft: "20px",
         paddingRight: "20px",
+        width: "100%",
         '&::-webkit-scrollbar': {
             width: '0.4em'
           },
@@ -99,6 +100,8 @@ const useStyles = makeStyles((theme) => ({
       marginTop: "10px",
       borderRadius: "10px",
       backgroundColor: "white",
+      width: "100%",
+      minWidth: "300px",
     },
     filterItem: {
       marginLeft: "5px",
@@ -138,7 +141,7 @@ const LandingPage = (props) => {
     }, [])
 
     const fetchPetPosts = () => {
-      Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`)
+      Api().get(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets`)
       .then((response) => {
         setPetPosts(response.data.reverse());
         console.log("response.data: ", response.data)
@@ -152,7 +155,7 @@ const LandingPage = (props) => {
     }
 
     const deletePost = (id) => {
-      Api().delete(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${id}`)
+      Api().delete(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets/${id}`)
       .then((response) => {
         console.log("response.data: ", response.data)
         setDeletePostId("");
@@ -164,14 +167,10 @@ const LandingPage = (props) => {
 
     useEffect(() => {
       if (filterStatus === "All" && filterSpecies === "All") {
-        fetchPetPosts
+        fetchPetPosts();
       }
       else {
-        const body = {
-          status: filterStatus,
-          type: filterSpecies,
-        }
-        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`, body)
+        Api().get(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets/filter?type=${filterSpecies}&status=${filterStatus}`,)
         .then((response) => {
           setPetPosts(response.data.reverse());
           console.log("response.data: ", response.data)
@@ -192,7 +191,7 @@ const LandingPage = (props) => {
             
                 <div className={classes.subContainer}>
                     <div className={classes.postDiv} style={{overflow: "auto"}}>
-                      {petPosts.length !== 0 &&
+                      {(petPosts.length !== 0 || filterStatus !== "All" || filterSpecies !== "All") &&
                       <div className={classes.filterDiv}>
                         <FormControl variant='outlined' fullWidth={true}>
                           <InputLabel> Filter By Status</InputLabel>

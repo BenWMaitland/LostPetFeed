@@ -110,7 +110,7 @@ const myPosts = (props) => {
     }, [])
 
     const fetchPetPosts = () => {
-        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`)
+        Api().get(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets`)
         .then((response) => {
             var myPosts = response.data.filter(post => post.username === Session.getUser()?.username);
             setPetPosts(myPosts.reverse());
@@ -125,7 +125,7 @@ const myPosts = (props) => {
     }
 
     const deletePost = (id) => {
-        Api().delete(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${id}`)
+        Api().delete(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets/${id}`)
         .then((response) => {
           console.log("response.data: ", response.data)
           setDeletePostId("");

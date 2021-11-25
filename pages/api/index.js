@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/';
+const BASE_URL = 'http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/';
 // const BASE_URL = 'http://localhost:44365/api/';
 // const BASE_URL = 'https://jsonplaceholder.typicode.com/';
 

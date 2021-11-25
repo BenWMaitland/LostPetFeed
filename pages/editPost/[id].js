@@ -180,7 +180,7 @@ const CreatePost = (props) => {
         const body = {
             petId: router.query.id
         }
-        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query.id}`, body)
+        Api().get(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets/${router.query.id}`, body)
         .then((response) => {
             setInitialData(response.data);
             setName(response.data.name)
@@ -239,7 +239,7 @@ const CreatePost = (props) => {
         const formData = new FormData();
         formData.append("image", imageFile);
         
-        Api().post(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/UploadImage`, formData, {
+        Api().post(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets/UploadImage`, formData, {
             headers: {
               accept: "application/json",
               "Content-Type": "multipart/form-data",
@@ -271,7 +271,7 @@ const CreatePost = (props) => {
         if (!imageUrl && image) {
             body.image = image;
         }
-        Api().put(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets/${router.query?.id}`, body)
+        Api().put(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Pets/${router.query?.id}`, body)
         .then((response) => {
             setDisplayModal(true);
             console.log("response.data: ", response.data)

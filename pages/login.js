@@ -96,7 +96,7 @@ const Login = (props) => {
             password: password
         }
         Api()
-        .post("http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/AppUsers/Authenticate", body)
+        .post("http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/AppUsers/Authenticate", body)
         .then((response) => {
             console.log("response is ", response);
             Session.setToken(response.data);

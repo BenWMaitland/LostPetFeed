@@ -90,7 +90,7 @@ const CommentSection = ({selectedPostId, postId}) => {
             username: Session.getUser()?.username,
             content: comment,
         }
-        Api().post(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/`, body)
+        Api().post(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Comments/`, body)
         .then((response) => {
             console.log("response.data: ", response.data)
             setComment("");
@@ -104,7 +104,7 @@ const CommentSection = ({selectedPostId, postId}) => {
         const body = {
             content: editCommentContent
         }
-        Api().put(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/${editEnabledId}`, body)
+        Api().put(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Comments/${editEnabledId}`, body)
         .then((response) => {
             console.log("response.data: ", response.data)
             setEditEnabledId("");
@@ -116,7 +116,7 @@ const CommentSection = ({selectedPostId, postId}) => {
     }
 
     const fetchComments = () => {
-        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/`, { params: { petId: postId } })
+        Api().get(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Comments/`, { params: { petId: postId } })
         .then((response) => {
             console.log("response.data: ", response.data)
             setCommentList(response.data);
@@ -127,7 +127,7 @@ const CommentSection = ({selectedPostId, postId}) => {
     }
     
     const deleteComment = (id) => {
-        Api().delete(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Comments/${id}`)
+        Api().delete(`http://reunitepetswebapi-dev.us-east-1.elasticbeanstalk.com/api/Comments/${id}`)
         .then((response) => {
           console.log("response.data: ", response.data);
           setDeleteCommentId("");
