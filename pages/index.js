@@ -7,7 +7,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Typography } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CommentSection from '../components/commentSection';
 import Api from './api';
@@ -92,18 +92,46 @@ const useStyles = makeStyles((theme) => ({
       color: "blue",
       cursor: "pointer",
     },
+    filterDiv: {
+      display: "flex",
+      flexDirection: "row",
+      padding: "20px",
+      marginTop: "10px",
+      borderRadius: "10px",
+      backgroundColor: "white",
+    },
+    filterItem: {
+      marginLeft: "5px",
+      marginRight: "5px",
+    },
 }));
 
 const LandingPage = (props) => {
     const classes = useStyles();
     const router = useRouter();
 
-    const [isExpanded, setIsExpanded] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState("");
     const [deletePostId, setDeletePostId] = useState("");
     const [petPosts, setPetPosts] = useState([]);
+    const [filterStatus, setFilterStatus] = useState("All");
+    const [filterSpecies, setFilterSpecies] = useState("All");
     
     const [ignored, setIgnored] = useState(0);
+    
+    const statusOptions = [
+      "All",
+      "Lost",
+      "Found",
+    ]
+
+    const speciesOptions = [
+        "All",
+        "Dog",
+        "Cat",
+        "Bird",
+        "Rabbit",
+        "Other",
+    ]
 
     useEffect(() => {
       fetchPetPosts();
@@ -134,6 +162,25 @@ const LandingPage = (props) => {
       });
     }
 
+    useEffect(() => {
+      if (filterStatus === "All" && filterSpecies === "All") {
+        fetchPetPosts
+      }
+      else {
+        const body = {
+          status: filterStatus,
+          type: filterSpecies,
+        }
+        Api().get(`http://lb-reunitepetapi-1680165263.us-east-1.elb.amazonaws.com/api/Pets`, body)
+        .then((response) => {
+          setPetPosts(response.data.reverse());
+          console.log("response.data: ", response.data)
+        }).catch((e) => {
+          console.log("e: ", e);
+        });
+      }
+    }, [filterStatus, filterSpecies])
+
     return (
         <div className={classes.imageContainer}
             style={{backgroundImage: "url(/blurred-web-backgrounds.jpg)"}}
@@ -145,6 +192,35 @@ const LandingPage = (props) => {
             
                 <div className={classes.subContainer}>
                     <div className={classes.postDiv} style={{overflow: "auto"}}>
+                      {petPosts.length !== 0 &&
+                      <div className={classes.filterDiv}>
+                        <FormControl variant='outlined' fullWidth={true}>
+                          <InputLabel> Filter By Status</InputLabel>
+                          <Select
+                              value={filterStatus}
+                              className={classes.filterItem}
+                              onChange={(event) => setFilterStatus(event.target.value)}
+                              label={"Filter By Status"}
+                              >
+                              {statusOptions.map((option) => (
+                                <MenuItem value={option}>{option}</MenuItem>
+                                ))}
+                          </Select>
+                        </FormControl>
+                        <FormControl variant='outlined' fullWidth={true}>
+                          <InputLabel> Filter By Species</InputLabel>
+                          <Select
+                              value={filterSpecies}
+                              className={classes.filterItem}
+                              onChange={(event) => setFilterSpecies(event.target.value)}
+                              label={"Filter By Species"}
+                              >
+                              {speciesOptions.map((option) => (
+                                <MenuItem value={option}>{option}</MenuItem>
+                                ))}
+                          </Select>
+                        </FormControl>
+                      </div>}
                         {petPosts.map((dataItem, index) => (
                             <Card 
                             root={classes.card}
