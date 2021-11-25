@@ -193,6 +193,14 @@ const Login = (props) => {
                         Sign Up
                     </a>
                 </div>
+                <div 
+                    style={{marginTop: "15px"}}
+                >
+                    Just looking?{" "}
+                    <a className={classes.link} onClick={() => router.push("/")}>
+                        View Home Page
+                    </a>
+                </div>
             </div>
         </div>
     );

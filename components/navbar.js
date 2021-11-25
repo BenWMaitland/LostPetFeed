@@ -65,13 +65,25 @@ const NavBar = ({forceParentRerender = () => { }}) => {
 
     return (
         <div className={classes.container}>
-            <Button className={loggedIn ? classes.button : classes.hidden} onClick={() => { router.push("/") }} disabled={router.pathname === "/"}>
-                Home
+            <Button 
+            className={classes.button} 
+            onClick={() => { router.push("/") }} 
+            disabled={router.pathname === "/"} 
+            style={router.pathname === "/" ? {color: "#A8ECE7"} : {}}>
+                Lost Pet Feed
             </Button>
-            <Button className={loggedIn ? classes.button : classes.hidden} onClick={() => { router.push("/myPosts") }} disabled={router.pathname === "/myPosts"}>
+            <Button 
+            className={loggedIn ? classes.button : classes.hidden} 
+            onClick={() => { router.push("/myPosts") }} 
+            disabled={router.pathname === "/myPosts"} 
+            style={router.pathname === "/myPosts" ? {color: "#A8ECE7"} : {}}>
                 My Posts
             </Button>
-            <Button className={loggedIn ? classes.button : classes.hidden} onClick={() => onClickCreatePost()} disabled={router.pathname === "/createPost"}>
+            <Button 
+            className={loggedIn ? classes.button : classes.hidden} 
+            onClick={() => onClickCreatePost()} 
+            disabled={router.pathname === "/createPost"}
+            style={router.pathname === "/createPost" ? {color: "#A8ECE7"} : {}}>
                 Create Post
             </Button>
             {loggedIn ?
@@ -86,7 +98,7 @@ const NavBar = ({forceParentRerender = () => { }}) => {
                 className={classes.button}
                 onClick={() => onClickLogin()}
                 >
-                    Login
+                    Login / Register
                 </Button>
             }
         </div>
